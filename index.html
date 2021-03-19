@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kill the Monsters</title>
+    <style>
+        .button {
+            background: #7044a0;
+            border: none;
+            border-bottom: 2px solid #603a88;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 300;
+            padding-bottom: .3rem;
+            transition: background .3s ease, color .3s ease;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            width: 10rem;
+        }
+    </style>
+</head>
+<body style="background-color: black; text-align: center">
+<h2 style="color: white">Kill all 10 Monsters within 1 sec when they appear!!!</h1>
+<table id = "gridId" style="margin: auto;">
+<tr>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+</tr>
+<tr>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+</tr>
+<tr>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+    <td onclick="killMonster(this)"><img src="images/cell.png"/></td>
+</tr>
+</table><br>
+<input id="replayId" type="button" class="button" value="Replay" style="visibility: visible;" onclick="reload()"/><br>
+<h2 id="displayScoreId" style="font: bold; color: red"></h2>
+<br>
+<span style="color: white; font-size: 1.25">No. of Monsters appeared : </span><span id="monsterCountId" style="font: bold; color: red; font-size: 1.25em"></span><br>
+<span style="color: white">No. of Monsters killed : </span><span id="monsterKillCountId" style="font: bold; color: red; font-size: 1.25em"></span><br>
+<span style="color: white">No. of Monsters missed : </span><span id="monsterMissedCountId" style="font: bold; color: red; font-size: 1.25em"></span>
+
+
+<script>
+
+function reload() {
+    window.location.reload();
+}
+
+for(i = 0; i < document.getElementById('gridId').rows.length; i++){
+    for(j = 0; j < document.getElementById('gridId').rows[i].cells.length; j++){
+        document.getElementById('gridId').rows[i].cells[j].id = i+''+j;
+    }
+}
+
+var cellArray = document.getElementsByTagName('td');
+var  x = setInterval(timer,3000);
+
+var monsterCount = 0;
+var monsterKillCount = 0;
+var killFlag;
+var pos;
+function timer(){
+    killFlag = false;
+    pos = Math.floor(Math.random() * 9);
+    cellArray[pos].innerHTML = '<img src="images/circleCell.png"/>';
+    monsterCount++; //getting no. of times the timer is called or the monster is displayed
+    document.getElementById('monsterCountId').innerHTML = monsterCount;
+    setTimeout(clearTimer,1000); // doing timout to make the image blink
+}
+function clearTimer(){
+    cellArray[pos].innerHTML = '<img src="images/cell.png"/>';
+    document.getElementById('monsterMissedCountId').innerHTML = monsterCount - monsterKillCount;
+    if(monsterCount == 10){
+        clearInterval(x);
+        displayScore();
+    }
+}
+
+function killMonster(elem) {
+    //debugger;
+    if(elem.innerHTML == "<img src=\"images/circleCell.png\">"){
+        killFlag = true;
+        monsterKillCount++;
+        document.getElementById('monsterKillCountId').innerHTML = monsterKillCount;
+        elem.innerHTML = '<img src="images/monsterDead.png">';
+    }
+}
+
+function displayScore(){
+
+    if(monsterKillCount <=5){
+        document.getElementById('displayScoreId').innerHTML = `You Killed ${monsterKillCount} monsters. Try to kill more next time :)`;
+    }
+    else if(monsterKillCount >5 && monsterKillCount <=8){
+        document.getElementById('displayScoreId').innerHTML = `Great Job!! You Killed ${monsterKillCount} monsters :)`;
+    }
+    else if(monsterKillCount >= 9){
+        document.getElementById('displayScoreId').innerHTML = `Excellent!! You Killed ${monsterKillCount} monsters :)`;
+    }
+}
+
+
+</script>
+
+</body>
+</html>
